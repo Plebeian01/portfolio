@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Jack Bull — UX Researcher & Applied AI Specialist. Researching how people understand, trust, and interact with AI-generated outputs." />
+  <title>Jack Bull — UX Researcher & Applied AI Specialist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="site-header" id="site-header">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a href="#hero" class="nav-logo">JB</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="#about">About</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero" id="hero" aria-label="Introduction">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="hero-eyebrow reveal">Detroit, MI · Open to remote &amp; relocation</p>
+          <h1 class="hero-name reveal">Jack Bull</h1>
+          <p class="hero-title reveal">UX Researcher &amp; Applied AI Specialist</p>
+          <p class="hero-statement reveal">I research how people understand, trust, and interact with AI&#8209;generated outputs.</p>
+          <div class="hero-actions reveal">
+            <a href="#work" class="btn btn-primary">View My Work</a>
+            <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+          </div>
+        </div>
+        <div class="hero-decoration" aria-hidden="true">
+          <div class="hero-orb"></div>
+        </div>
+      </div>
+      <a href="#about" class="scroll-indicator" aria-label="Scroll to About section">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- About -->
+    <section class="about section" id="about" aria-label="About Jack Bull">
+      <div class="container about-inner">
+        <div class="section-label reveal">About</div>
+        <div class="about-content">
+          <h2 class="section-heading reveal">Bridging rigorous research<br class="break-lg"> with human-centred AI.</h2>
+          <div class="about-body">
+            <p class="reveal">I'm a UX researcher and applied AI practitioner with a focus on explainability, trust, and the human experience of machine intelligence. My work sits at the intersection of cognitive psychology, interaction design, and machine learning — asking not just <em>what</em> a model predicts, but <em>how</em> people make sense of those predictions.</p>
+            <p class="reveal">I hold an <strong>MSc in Applied AI &amp; UX Design</strong> from Abertay University (graduated with distinction, 2025) and a <strong>BA in UX Architecture</strong> from Michigan State University (2023). I'm based in Detroit, MI, and open to remote roles and relocation.</p>
+          </div>
+          <div class="about-facts reveal">
+            <div class="fact">
+              <span class="fact-value">MSc</span>
+              <span class="fact-label">Applied AI &amp; UX Design<br>Abertay University, 2025 — Distinction</span>
+            </div>
+            <div class="fact">
+              <span class="fact-value">BA</span>
+              <span class="fact-label">UX Architecture<br>Michigan State University, 2023</span>
+            </div>
+            <div class="fact">
+              <span class="fact-value">2+</span>
+              <span class="fact-label">Years conducting<br>human–AI interaction research</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work -->
+    <section class="work section section-alt" id="work" aria-label="Selected projects">
+      <div class="container">
+        <div class="section-label reveal">Work</div>
+        <h2 class="section-heading reveal">Selected Projects</h2>
+        <p class="section-sub reveal">Case studies spanning mixed-methods research, machine learning, and interaction design.</p>
+
+        <div class="projects-grid">
+
+          <!-- Project 1 -->
+          <article class="project-card reveal" aria-label="Project: AI Explanation and User Trust">
+            <div class="card-inner">
+              <div class="card-header">
+                <span class="card-badge">Master's Thesis</span>
+                <div class="card-icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <rect x="3" y="3" width="9" height="9" rx="1.5" fill="currentColor" opacity="0.2"/>
+                    <rect x="16" y="3" width="9" height="9" rx="1.5" fill="currentColor" opacity="0.6"/>
+                    <rect x="3" y="16" width="9" height="9" rx="1.5" fill="currentColor" opacity="0.6"/>
+                    <rect x="16" y="16" width="9" height="9" rx="1.5" fill="currentColor"/>
+                  </svg>
+                </div>
+              </div>
+              <h3 class="card-title">AI Explanation &amp; User Trust</h3>
+              <p class="card-description">Mixed-methods study examining how SHAP, LIME, and LLM-generated explanation styles affect user trust in a movie recommendation system. Built the XGBoost recommendation model from scratch and ran controlled usability studies to surface how explanation format shapes perceived reliability.</p>
+              <ul class="card-tags" role="list">
+                <li>Mixed Methods</li>
+                <li>XAI</li>
+                <li>XGBoost</li>
+                <li>SHAP / LIME</li>
+                <li>Python</li>
+                <li>Usability Testing</li>
+              </ul>
+              <a href="#" class="card-link" aria-label="View AI Explanation & User Trust case study (coming soon)">
+                View Case Study
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project-card reveal" aria-label="Project: Competitive MtG Tournament ML Model">
+            <div class="card-inner">
+              <div class="card-header">
+                <span class="card-badge">ML Research</span>
+                <div class="card-icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <circle cx="8" cy="20" r="3" fill="currentColor" opacity="0.3"/>
+                    <circle cx="14" cy="12" r="3" fill="currentColor" opacity="0.6"/>
+                    <circle cx="20" cy="6" r="3" fill="currentColor"/>
+                    <path d="M8 20L14 12L20 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
+              <h3 class="card-title">Competitive MtG Tournament ML Model</h3>
+              <p class="card-description">Built a deep neural network with embedding layers to predict deck win probabilities from 100,000+ competitive Magic: The Gathering tournament data points. The model captures complex card-synergy relationships that resist traditional feature engineering approaches.</p>
+              <ul class="card-tags" role="list">
+                <li>PyTorch</li>
+                <li>Deep Learning</li>
+                <li>Embeddings</li>
+                <li>Python</li>
+                <li>Data Engineering</li>
+              </ul>
+              <a href="#" class="card-link" aria-label="View MtG ML Model case study (coming soon)">
+                View Case Study
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="skills section" id="skills" aria-label="Skills and expertise">
+      <div class="container">
+        <div class="section-label reveal">Skills</div>
+        <h2 class="section-heading reveal">Expertise</h2>
+        <p class="section-sub reveal">A researcher's toolkit — methods-first, with the technical depth to close the loop.</p>
+
+        <div class="skills-grid">
+
+          <div class="skill-group reveal" aria-label="UX Research skills">
+            <div class="skill-group-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <circle cx="11" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M3 19c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="skill-group-title">UX Research</h3>
+            <ul class="skill-list" role="list">
+              <li>Mixed-Methods Research</li>
+              <li>Usability Testing</li>
+              <li>Survey Design</li>
+              <li>Human-AI Interaction</li>
+              <li>UX Writing</li>
+            </ul>
+          </div>
+
+          <div class="skill-group reveal" aria-label="Applied AI and Data skills">
+            <div class="skill-group-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="12" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="3" y="12" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="12" y="12" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <h3 class="skill-group-title">Applied AI &amp; Data</h3>
+            <ul class="skill-list" role="list">
+              <li>Python</li>
+              <li>XGBoost</li>
+              <li>PyTorch</li>
+              <li>SHAP &amp; LIME</li>
+              <li>Scikit-learn</li>
+              <li>SQL</li>
+            </ul>
+          </div>
+
+          <div class="skill-group reveal" aria-label="Design and Prototyping skills">
+            <div class="skill-group-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M5 17L9 6l4 8 3-4 2 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="skill-group-title">Design &amp; Prototyping</h3>
+            <ul class="skill-list" role="list">
+              <li>Figma</li>
+              <li>Webflow</li>
+              <li>HTML / CSS / JS</li>
+              <li>Adobe XD</li>
+              <li>Rapid Prototyping</li>
+            </ul>
+          </div>
+
+          <div class="skill-group reveal" aria-label="Research tools">
+            <div class="skill-group-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M9 14a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="skill-group-title">Research Tools</h3>
+            <ul class="skill-list" role="list">
+              <li>SPSS</li>
+              <li>Jamovi</li>
+              <li>R</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact section section-alt" id="contact" aria-label="Contact Jack Bull">
+      <div class="container contact-inner">
+        <div class="section-label reveal">Contact</div>
+        <h2 class="section-heading reveal">Let's Talk</h2>
+        <p class="section-sub reveal">Interested in working together or just want to connect? I'm always open to conversations about research, AI, and design.</p>
+
+        <div class="contact-layout">
+          <div class="contact-links reveal">
+            <a href="mailto:jrbull301@gmail.com" class="contact-item" aria-label="Email Jack Bull">
+              <div class="contact-item-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M2 7l8 5 8-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <span class="contact-item-label">Email</span>
+                <span class="contact-item-value">jrbull301@gmail.com</span>
+              </div>
+            </a>
+            <a href="https://www.linkedin.com/in/jack-bull-jrb062901/" target="_blank" rel="noopener noreferrer" class="contact-item" aria-label="Jack Bull on LinkedIn (opens in new tab)">
+              <div class="contact-item-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect x="2" y="2" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M6 9v5M6 6.5v.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M10 14v-3a2 2 0 0 1 4 0v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 9v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <span class="contact-item-label">LinkedIn</span>
+                <span class="contact-item-value">jack-bull-jrb062901</span>
+              </div>
+            </a>
+          </div>
+
+          <form class="contact-form reveal" aria-label="Contact form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your name" autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Tell me about your project or just say hello…"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary form-submit">Send Message</button>
+            <p class="form-note">This form is currently a placeholder — for now, email directly at <a href="mailto:jrbull301@gmail.com">jrbull301@gmail.com</a>.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2025 Jack Bull</p>
+      <nav aria-label="Footer navigation">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
