@@ -35,8 +35,8 @@
 
 /* ─── Skip link ──────────────────────────────────────────── */
 .skip-link {
-  position: absolute;
-  top: -100%;
+  position: fixed;
+  top: -3rem;
   left: 16px;
   z-index: 9999;
   padding: .5rem 1.1rem;
