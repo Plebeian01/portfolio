@@ -35,6 +35,16 @@
     });
   });
 
+  // Close nav on Escape key, return focus to toggle
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      navToggle.focus();
+    }
+  });
+
   // Close nav when clicking outside
   document.addEventListener('click', function (e) {
     if (
@@ -107,8 +117,10 @@
 
     navAnchors.forEach(function (a) {
       a.classList.remove('active');
+      a.removeAttribute('aria-current');
       if (a.getAttribute('href') === '#' + current) {
         a.classList.add('active');
+        a.setAttribute('aria-current', 'page');
       }
     });
   }
