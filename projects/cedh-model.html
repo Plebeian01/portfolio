@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Case study: A deep neural network predicting cEDH match outcomes from deck choice and turn order, achieving 40% accuracy — twice the baseline." />
+  <title>cEDH Matchup Prediction Model — Jack Bull</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    /* ─── Case study page overrides ─────────────────────────── */
+
+    /* Nav links point back to main page */
+    .nav-logo { color: var(--accent); }
+
+    /* Case study hero — compact dark band */
+    .cs-hero {
+      background: var(--navy);
+      padding-block: clamp(96px, 14vw, 140px) clamp(56px, 8vw, 88px);
+    }
+
+    .cs-hero .section-label { color: var(--accent); margin-bottom: 20px; }
+
+    .cs-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--white);
+      margin-bottom: 20px;
+      max-width: 760px;
+    }
+
+    .cs-subtitle {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.65);
+      max-width: 620px;
+      margin-bottom: 36px;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .875rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 36px;
+      transition: gap var(--transition);
+    }
+    .back-link:hover { gap: 11px; }
+    .back-link svg { flex-shrink: 0; }
+
+    /* Stats strip */
+    .cs-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .cs-stat {
+      display: flex;
+      flex-direction: column;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      padding: 14px 20px;
+      min-width: 130px;
+    }
+
+    .cs-stat-value {
+      font-size: 1.375rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+
+    .cs-stat-label {
+      font-size: .775rem;
+      color: rgba(255,255,255,.5);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    /* Hero actions */
+    .cs-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+
+    .btn-outline-white {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,.35);
+    }
+    .btn-outline-white:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,.07);
+    }
+
+    /* Body sections */
+    .cs-body { max-width: 760px; }
+
+    .cs-section { padding-block: clamp(56px, 8vw, 96px); }
+    .cs-section-alt { background: var(--off-white); }
+
+    .cs-section .section-label { margin-bottom: 12px; }
+    .cs-section .section-heading { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 16px; }
+
+    /* Prose */
+    .cs-prose p { color: var(--text); margin-bottom: 1.25rem; font-size: 1.0125rem; line-height: 1.8; }
+    .cs-prose p:last-child { margin-bottom: 0; }
+
+    /* Callout / key insight block */
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-dim);
+      border-radius: 0 8px 8px 0;
+      padding: 18px 22px;
+      margin-block: 28px;
+    }
+    .callout p { color: var(--navy); font-weight: 500; margin: 0; }
+
+    /* Two-model layout */
+    .model-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-block: 28px;
+    }
+
+    @media (max-width: 600px) { .model-pair { grid-template-columns: 1fr; } }
+
+    .model-card {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 24px;
+      background: var(--white);
+    }
+
+    .cs-section-alt .model-card { background: var(--white); }
+
+    .model-card-label {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent-text);
+      margin-bottom: 8px;
+    }
+
+    .model-card h4 {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .model-card p { font-size: .9375rem; color: var(--text-muted); line-height: 1.7; margin: 0; }
+
+    /* Tech tag list */
+    .cs-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-block: 20px;
+      list-style: none;
+    }
+
+    .cs-tags li {
+      font-size: .8125rem;
+      font-weight: 500;
+      padding: 4px 12px;
+      background: var(--gray-100);
+      border-radius: 20px;
+      color: var(--gray-600);
+    }
+
+    /* Figure placeholder */
+    .cs-figure {
+      margin-block: 32px;
+      border: 1.5px dashed var(--gray-200);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      text-align: center;
+      background: var(--gray-100);
+    }
+
+    .cs-figure img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-inline: auto;
+    }
+
+    .cs-figure figcaption {
+      margin-top: 14px;
+      font-size: .875rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .cs-figure-placeholder {
+      color: var(--gray-400);
+      font-size: .9rem;
+      padding-block: 16px;
+    }
+
+    /* Results table */
+    .cs-table-wrap { overflow-x: auto; margin-block: 28px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+
+    thead th {
+      background: var(--navy);
+      color: var(--white);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 500;
+      font-size: .8125rem;
+    }
+
+    tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-200);
+      color: var(--text);
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:nth-child(even) td { background: var(--gray-100); }
+
+    .result-correct { color: var(--accent-text); font-weight: 600; }
+
+    /* Seat win-rate visual */
+    .seat-bars { display: flex; flex-direction: column; gap: 10px; margin-block: 24px; }
+
+    .seat-bar-row { display: flex; align-items: center; gap: 12px; }
+
+    .seat-bar-label {
+      width: 60px;
+      font-size: .875rem;
+      font-weight: 500;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    .seat-bar-track {
+      flex: 1;
+      height: 10px;
+      background: var(--gray-200);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .seat-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--accent);
+      opacity: .85;
+    }
+
+    .seat-bar-pct {
+      width: 48px;
+      font-size: .8125rem;
+      color: var(--text-muted);
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Limitations list */
+    .cs-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-block: 20px;
+    }
+
+    .cs-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .cs-list li::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 9px;
+      flex-shrink: 0;
+    }
+
+    /* Expert comparison inline stat */
+    .compare-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-block: 24px;
+    }
+
+    .compare-item {
+      flex: 1;
+      min-width: 160px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      background: var(--white);
+      text-align: center;
+    }
+
+    .compare-item-value {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .compare-item-label {
+      font-size: .8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Page footer spacing */
+    .cs-footer-cta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding-block: clamp(48px, 7vw, 80px);
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .cs-footer-cta-text h3 {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .cs-footer-cta-text p { font-size: .95rem; color: var(--text-muted); margin: 0; }
+
+    .cs-footer-cta-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation -->
+  <header class="site-header scrolled" id="site-header">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a href="../index.html" class="nav-logo">JB</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#work">Work</a></li>
+        <li><a href="../index.html#skills">Skills</a></li>
+        <li><a href="../index.html#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Hero -->
+    <section class="cs-hero" aria-label="Project overview">
+      <div class="container">
+
+        <a href="../index.html#work" class="back-link" aria-label="Back to all projects">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M13 8H3M7 12L3 8L7 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          All Projects
+        </a>
+
+        <div class="section-label">ML Research</div>
+        <h1 class="cs-title">Modeling Expected Win Probability in Competitive Magic: The Gathering</h1>
+        <p class="cs-subtitle">A deep neural network predicting cEDH match outcomes from deck choice and turn order — trained on five months of tournament data.</p>
+
+        <div class="cs-stats" role="list" aria-label="Project key figures">
+          <div class="cs-stat" role="listitem">
+            <span class="cs-stat-value">40.2%</span>
+            <span class="cs-stat-label">Test Accuracy</span>
+          </div>
+          <div class="cs-stat" role="listitem">
+            <span class="cs-stat-value">2×</span>
+            <span class="cs-stat-label">Random Baseline</span>
+          </div>
+          <div class="cs-stat" role="listitem">
+            <span class="cs-stat-value">100K+</span>
+            <span class="cs-stat-label">Data Points</span>
+          </div>
+          <div class="cs-stat" role="listitem">
+            <span class="cs-stat-value">2</span>
+            <span class="cs-stat-label">Neural Networks</span>
+          </div>
+          <div class="cs-stat" role="listitem">
+            <span class="cs-stat-value">5 mo.</span>
+            <span class="cs-stat-label">Tournament Data</span>
+          </div>
+        </div>
+
+        <div class="cs-hero-actions">
+          <a href="https://github.com/Plebeian01/cEDH_Matchup_Prediction_Tool" target="_blank" rel="noopener noreferrer" class="btn btn-primary" aria-label="View source code on GitHub (opens in new tab)">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M6 12c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1H6v1zM8 2C5.24 2 3 4.24 3 7c0 1.85 1.01 3.47 2.5 4.33V12c0 .28.22.5.5.5h4c.28 0 .5-.22.5-.5v-.67C11.99 10.47 13 8.85 13 7c0-2.76-2.24-5-5-5z" fill="currentColor"/>
+            </svg>
+            View on GitHub
+          </a>
+          <a href="#methodology" class="btn btn-outline-white">Read Methodology</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="cs-section" id="problem" aria-label="Problem statement">
+      <div class="container">
+        <div class="cs-body">
+          <div class="section-label reveal">The Problem</div>
+          <h2 class="section-heading reveal">Why cEDH resists traditional statistical analysis</h2>
+
+          <div class="cs-prose reveal">
+            <p>Competitive Commander (cEDH) is a four-player format of Magic: The Gathering with a fundamentally different statistical profile to every other format the game has produced. In one-on-one Magic, outcomes are zero-sum and attribution is simple: one player wins, one loses. In cEDH, four players compete simultaneously, and the cause of any given outcome is deeply entangled across opponents.</p>
+
+            <p>This creates several compounding problems for analysis. Matchup data becomes confounded — when Deck A loses, was it because of Deck B, C, or D? Players rely heavily on anecdote as a result. The singleton deck-building requirement (each of the 100 cards must be unique) makes individual games less consistent, requiring a larger sample size to draw statistically significant conclusions. And because the metagame evolves quickly, older data often becomes irrelevant before a sufficient sample accumulates.</p>
+
+            <p>Turn order adds another layer of complexity. Players who act earlier in a round have a structurally higher win rate — not because of skill, but because of the inherent advantage of acting before opponents.</p>
+          </div>
+
+          <div class="callout reveal" role="note">
+            <p>Seat 1 (first in turn order) wins approximately 28–30% of cEDH games — nearly double the 20% that perfect equality across four players would predict.</p>
+          </div>
+
+          <!-- Seat win-rate visual -->
+          <div class="reveal" aria-label="Win rate by seat position">
+            <p style="font-size:.875rem;font-weight:600;color:var(--navy);margin-bottom:14px;">Approximate win rate by seat (cEDH tournament data)</p>
+            <div class="seat-bars" role="list">
+              <div class="seat-bar-row" role="listitem">
+                <span class="seat-bar-label">Seat 1</span>
+                <div class="seat-bar-track"><div class="seat-bar-fill" style="width:58%" aria-hidden="true"></div></div>
+                <span class="seat-bar-pct">~29%</span>
+              </div>
+              <div class="seat-bar-row" role="listitem">
+                <span class="seat-bar-label">Seat 2</span>
+                <div class="seat-bar-track"><div class="seat-bar-fill" style="width:50%" aria-hidden="true"></div></div>
+                <span class="seat-bar-pct">~25%</span>
+              </div>
+              <div class="seat-bar-row" role="listitem">
+                <span class="seat-bar-label">Seat 3</span>
+                <div class="seat-bar-track"><div class="seat-bar-fill" style="width:42%" aria-hidden="true"></div></div>
+                <span class="seat-bar-pct">~21%</span>
+              </div>
+              <div class="seat-bar-row" role="listitem">
+                <span class="seat-bar-label">Seat 4</span>
+                <div class="seat-bar-track"><div class="seat-bar-fill" style="width:26%" aria-hidden="true"></div></div>
+                <span class="seat-bar-pct">~13%</span>
+              </div>
+              <div class="seat-bar-row" role="listitem">
+                <span class="seat-bar-label">Draw</span>
+                <div class="seat-bar-track"><div class="seat-bar-fill" style="width:24%" aria-hidden="true"></div></div>
+                <span class="seat-bar-pct">~12%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cs-prose reveal">
+            <p style="margin-top:24px;">This research proposes a machine learning solution: rather than trying to enumerate every possible interaction, train a deep neural network to find patterns across a large body of real tournament data — patterns that are too subtle or multi-dimensional for traditional statistical methods to surface.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dataset -->
+    <section class="cs-section cs-section-alt" id="dataset" aria-label="Dataset and data pipeline">
+      <div class="container">
+        <div class="cs-body">
+          <div class="section-label reveal">Dataset</div>
+          <h2 class="section-heading reveal">What the data looks like</h2>
+
+          <div class="cs-prose reveal">
+            <p>Tournament data was sourced from the public API provided by TopDeck.gg, the primary software platform used by cEDH tournament organizers. For each recorded game, three features are available:</p>
+          </div>
+
+          <div class="model-pair reveal">
+            <div class="model-card">
+              <div class="model-card-label">Feature 1</div>
+              <h4>Commander Choice</h4>
+              <p>The archetype identifier for each player's deck, treated as equivalent to Commander identity. Because cEDH decks use 100 unique cards, two decks sharing the same Commander play near-identically — card variation between them is treated as noise.</p>
+            </div>
+            <div class="model-card">
+              <div class="model-card-label">Feature 2</div>
+              <h4>Turn Order (Seat)</h4>
+              <p>Which of the four seat positions (1–4) each player occupies. Seat is one of the strongest single predictors of match outcome due to the structural first-mover advantage in cEDH.</p>
+            </div>
+            <div class="model-card">
+              <div class="model-card-label">Feature 3</div>
+              <h4>Historical Matchups</h4>
+              <p>A vector encoding how each commander has historically performed against each opponent in the pod. Even in four-player games, persistent matchup patterns exist and provide signal about table dynamics.</p>
+            </div>
+            <div class="model-card">
+              <div class="model-card-label">Outcome</div>
+              <h4>Match Result</h4>
+              <p>One of five classes: Seat 1 wins, Seat 2 wins, Seat 3 wins, Seat 4 wins, or Draw. The ~20% random baseline follows from four equal outcome classes plus draws.</p>
+            </div>
+          </div>
+
+          <div class="cs-prose reveal">
+            <p>Data collection and cleaning is handled in <code>TopdeckAPICall.py</code> and <code>DataPreprocessing511.py</code>. The preprocessing step assigns each unique Commander a numeric label ID — the format used by the embedding layers during training.</p>
+          </div>
+
+          <ul class="cs-tags reveal" role="list" aria-label="Technologies used">
+            <li>Python</li>
+            <li>TopDeck.gg API</li>
+            <li>Pandas</li>
+            <li>Label Encoding</li>
+            <li>CSV Pipeline</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Methodology -->
+    <section class="cs-section" id="methodology" aria-label="Model architecture and methodology">
+      <div class="container">
+        <div class="cs-body">
+          <div class="section-label reveal">Architecture</div>
+          <h2 class="section-heading reveal">Two models, two problems</h2>
+
+          <div class="cs-prose reveal">
+            <p>A critical early design decision was to separate win prediction from draw prediction. Draws are not a strategic goal of any deck — they are a byproduct of specific in-game events. The factors that cause draws differ meaningfully from the factors that determine which player wins. Collapsing them into a single five-class model obscured both signals.</p>
+            <p>The solution: two separate deep neural networks, each specialized to one task.</p>
+          </div>
+
+          <div class="model-pair reveal">
+            <div class="model-card">
+              <div class="model-card-label">Model 1</div>
+              <h4>Draw Classifier</h4>
+              <p>A binary classifier. Given a match's composition, it predicts the probability that the match ends in a draw. If this probability exceeds the tuned threshold (0.575), the final output is "Draw" and the second model is not called.</p>
+            </div>
+            <div class="model-card">
+              <div class="model-card-label">Model 2</div>
+              <h4>Seat Classifier</h4>
+              <p>A four-class classifier. Called only when the draw model predicts no draw. It outputs a win probability for each of the four seat positions, and the seat with the highest probability is the final prediction.</p>
+            </div>
+          </div>
+
+          <div class="section-label reveal" style="margin-top:40px;">Embedding &amp; Attention</div>
+          <h3 class="reveal" style="font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:16px;">How commanders become vectors</h3>
+
+          <div class="cs-prose reveal">
+            <p>Commander names are high-cardinality categorical variables — there are hundreds of distinct commanders in the cEDH metagame. One-hot encoding at this scale would produce an extremely sparse, uninformative feature space. Instead, both models use <strong>embedding layers</strong> to represent each Commander as a learned dense numeric vector.</p>
+            <p>During training, the embedding layer builds a vector for each Commander that encodes its latent characteristics — its aggression level, its reliance on specific game plans, its historical relationships with other decks. Two Commanders that tend to produce similar outcomes in similar pods will end up with similar embeddings. This allows the model to generalize across Commanders it has seen less frequently by reasoning about their similarity to more well-represented ones.</p>
+            <p>These embedded Commander representations are then processed through <strong>multi-head self-attention</strong>. Borrowed from Transformer architectures, self-attention lets the model interpret each player's Commander in the context of the other three at the table — not in isolation. A Commander that is very powerful in a vacuum may be weakened by a specific opponent, and self-attention provides the mechanism for the model to learn that dependency.</p>
+          </div>
+
+          <div class="callout reveal" role="note">
+            <p>Embedding layers allow the model to learn "what kind of deck is this?" from data — capturing synergy and counter-synergy relationships that would be impossible to hand-engineer across hundreds of Commanders.</p>
+          </div>
+
+          <div class="section-label reveal" style="margin-top:40px;">Training</div>
+          <h3 class="reveal" style="font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:16px;">Handling class imbalance</h3>
+
+          <div class="cs-prose reveal">
+            <p>cEDH outcomes are not uniformly distributed. Seat 1 wins far more often than Seat 4, and draws are relatively rare. Without intervention, a naive model could achieve reasonable accuracy by simply predicting Seat 1 every time — which is not useful.</p>
+            <p>To counteract this, <strong>inverse frequency class weighting</strong> was applied during training. Each class's loss contribution is scaled in proportion to how underrepresented that class is in the dataset. The model is penalized more severely for misclassifying rare outcomes, forcing it to learn their patterns rather than ignore them.</p>
+            <p>Additional training decisions: the <strong>ADAM optimizer</strong> with <strong>ReduceLROnPlateau</strong> to dynamically adjust the learning rate as training converges; <strong>early stopping</strong> to halt training when validation loss stops improving, preventing overfitting; and an 80/20 train/test split with batch size 16.</p>
+          </div>
+
+          <ul class="cs-tags reveal" role="list" aria-label="Technologies used in training">
+            <li>PyTorch</li>
+            <li>Embedding Layers</li>
+            <li>Multi-Head Self-Attention</li>
+            <li>ADAM Optimizer</li>
+            <li>Cross-Entropy Loss</li>
+            <li>Early Stopping</li>
+            <li>Inverse Frequency Weighting</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="cs-section cs-section-alt" id="results" aria-label="Results and analysis">
+      <div class="container">
+        <div class="cs-body">
+          <div class="section-label reveal">Results</div>
+          <h2 class="section-heading reveal">40.2% accuracy — twice the random baseline</h2>
+
+          <div class="cs-prose reveal">
+            <p>On the held-out test set, the combined model achieved <strong>40.2% overall accuracy</strong>. With five possible outcomes and a random baseline of 20%, this represents a 2× improvement — a meaningful result for a domain with the level of inherent noise and complexity present in cEDH.</p>
+            <p>Precision, recall, and F1 scores were broadly balanced across classes, indicating the model was not simply overfitting to common outcomes. However, performance was markedly uneven by seat position.</p>
+          </div>
+
+          <figure class="cs-figure reveal" aria-label="Classification report figure">
+            <div class="cs-figure-placeholder">
+              <p style="margin:0;color:var(--gray-400);">📊 Classification report screenshot — add image here</p>
+            </div>
+            <figcaption>Figure 1. Classification report for the best-performing model. Overall accuracy: 40.2%.</figcaption>
+          </figure>
+
+          <div class="section-label reveal" style="margin-top:40px;">Per-class breakdown</div>
+          <h3 class="reveal" style="font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:16px;">Where the model succeeds — and where it struggles</h3>
+
+          <div class="cs-prose reveal">
+            <p><strong>Seat 1</strong> is the model's strongest class: precision 0.498, recall 0.546, F1 0.521. The model reliably identifies configurations where the first-seat player is highly likely to win — a combination of strong Commander choice, favorable opponents, and the inherent turn-order advantage.</p>
+            <p><strong>Seats 2 and 3</strong> perform less impressively but remain clearly above chance — the leading diagonal in the confusion matrix is visible, indicating the model is detecting real patterns for these positions.</p>
+            <p><strong>Seat 4</strong> is an outlier in the worst possible direction. Its precision, recall, and F1 are all near chance level, and the confusion matrix shows predictions spread almost uniformly across all classes. One interpretation: out-of-game metrics (Commander choice, table composition) simply do not predict Seat 4 victories — players who win from last position may be doing so almost entirely through in-game actions, without any structural advantage to anchor a prediction to.</p>
+            <p><strong>Draws</strong> are underpredicted by design. Early testing showed that false positive draw predictions were more damaging to overall accuracy than missed draws, so the threshold was tuned toward false negatives. The model's draw precision remains reasonable — it correctly identifies high-confidence draw scenarios — but recall is low.</p>
+          </div>
+
+          <figure class="cs-figure reveal" aria-label="Confusion matrix figure">
+            <div class="cs-figure-placeholder">
+              <p style="margin:0;color:var(--gray-400);">📊 Confusion matrix screenshot — add image here</p>
+            </div>
+            <figcaption>Figure 2. Confusion matrix for the best-performing model. High diagonal values indicate correct predictions; Seat 4 (Class 3) shows near-uniform distribution across all classes.</figcaption>
+          </figure>
+
+          <figure class="cs-figure reveal" aria-label="Learning curves figure">
+            <div class="cs-figure-placeholder">
+              <p style="margin:0;color:var(--gray-400);">📉 Learning curves screenshot — add image here</p>
+            </div>
+            <figcaption>Figure 3. Training vs. validation loss curves for both models. The seat model converges stably; the draw model shows earlier signs of overfitting, mitigated by a reduced early stopping patience.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real-world testing -->
+    <section class="cs-section" id="real-world" aria-label="Real-world testing">
+      <div class="container">
+        <div class="cs-body">
+          <div class="section-label reveal">Real-World Testing</div>
+          <h2 class="section-heading reveal">Benchmarked against human experts</h2>
+
+          <div class="cs-prose reveal">
+            <p>To evaluate the model outside its training distribution, a single round of 15 tournament games — sourced from a competition not included in training or testing — was gathered and passed to the best-performing model. The same match data was independently evaluated by three cEDH experts, each asked to predict the most likely winner of each match.</p>
+          </div>
+
+          <div class="compare-strip reveal" role="list" aria-label="Accuracy comparison">
+            <div class="compare-item" role="listitem">
+              <div class="compare-item-value">4/15</div>
+              <div class="compare-item-label">Model correct<br>(26.6%)</div>
+            </div>
+            <div class="compare-item" role="listitem">
+              <div class="compare-item-value">5/15</div>
+              <div class="compare-item-label">Best expert<br>(33.3%)</div>
+            </div>
+            <div class="compare-item" role="listitem">
+              <div class="compare-item-value">3.7/15</div>
+              <div class="compare-item-label">Expert average<br>(24.4%)</div>
+            </div>
+            <div class="compare-item" role="listitem">
+              <div class="compare-item-value">6/15</div>
+              <div class="compare-item-label">Model–expert agreement<br>(best expert)</div>
+            </div>
+          </div>
+
+          <div class="cs-prose reveal">
+            <p>At 26.6%, the model's real-world performance fell below its trained accuracy of 40.2% — though it marginally exceeded the 24.4% average across the three experts. The subset of matches appears to contain results that run against the usual patterns in cEDH data, which disadvantaged both the model and the human experts equally.</p>
+            <p>More revealing than the raw accuracy is the model-expert agreement: the model and the best-performing expert made the same prediction in 6 of 15 cases. This suggests both the model and the expert were identifying the same structural signals (Commander strength, matchup history, seat position) and weighting them similarly — even when those signals led them away from the actual result.</p>
+            <p>Draws were uniformly missed in real-world testing, reinforcing the conclusion that draws are primarily determined by in-game dynamics that the available features cannot capture.</p>
+          </div>
+
+          <div class="callout reveal" role="note">
+            <p>The model performs on par with expert human analysts — a meaningful outcome given that both are operating on the same limited pre-match information.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusions -->
+    <section class="cs-section cs-section-alt" id="conclusions" aria-label="Conclusions and future work">
+      <div class="container">
+        <div class="cs-body">
+          <div class="section-label reveal">Conclusions</div>
+          <h2 class="section-heading reveal">What the model tells us about cEDH</h2>
+
+          <div class="cs-prose reveal">
+            <p>Beyond prediction accuracy, the model surfaces several concrete insights about the format:</p>
+          </div>
+
+          <ul class="cs-list reveal" aria-label="Key findings">
+            <li>Turn order advantage is real but not absolute. The model generally supports the conventional belief that Seat 1 is strongest — but also identifies specific Commander and table compositions where Seats 2 or 3 are more advantageous, suggesting deck choice mediates the turn-order effect.</li>
+            <li>Seat 4 is a structural disadvantage, not merely a statistical one. The model's near-total inability to predict Seat 4 wins from pre-match features implies that those wins are driven almost entirely by in-game events — deck choice and table composition provide essentially no predictive power for this position.</li>
+            <li>Draws cannot be predicted from pre-match data alone. Future work would need game-length data (total turns, time elapsed) — metrics current tournament software does not yet record.</li>
+            <li>The model agrees with human expert intuition, validating that embedding layers and attention are capturing the same qualitative signals that experienced players use, and doing so quantitatively.</li>
+          </ul>
+
+          <div class="section-label reveal" style="margin-top:40px;">Future Work</div>
+          <h3 class="reveal" style="font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:16px;">Where this research could go next</h3>
+
+          <ul class="cs-list reveal" aria-label="Future research directions">
+            <li><strong>Larger dataset.</strong> Five months of data is a constrained sample for the dimensionality of this problem. Extending to a multi-year dataset would allow the model to learn patterns across evolving metagames and improve generalization.</li>
+            <li><strong>In-game features.</strong> Turn count, game duration, and opening hand size could dramatically improve draw prediction and give the model signal that is currently invisible to it.</li>
+            <li><strong>Player Elo integration.</strong> TopDeck now records Elo ratings, but the threshold for qualification (10 recorded games at 32+ player events) excludes too many players for the current dataset size. As the dataset grows, player skill becomes a tractable feature.</li>
+            <li><strong>Explainability layer.</strong> Applying SHAP or LIME to the model's predictions would let players interrogate which Commanders or matchup combinations are driving a given prediction — a direct tool for metagame preparation.</li>
+            <li><strong>API fix and live predictor.</strong> TopDeck's API recently stopped returning Commander names in results. Once that is resolved, the pipeline can be restored and the predictor can be deployed as an interactive tool for players.</li>
+          </ul>
+        </div>
+
+        <!-- Footer CTA -->
+        <div class="cs-footer-cta">
+          <div class="cs-footer-cta-text">
+            <h3>View the source code</h3>
+            <p>All preprocessing, model architecture, and training code is on GitHub.</p>
+          </div>
+          <div class="cs-footer-cta-actions">
+            <a href="https://github.com/Plebeian01/cEDH_Matchup_Prediction_Tool" target="_blank" rel="noopener noreferrer" class="btn btn-primary" aria-label="View source code on GitHub (opens in new tab)">View on GitHub</a>
+            <a href="../index.html#work" class="btn btn-ghost" style="color:var(--navy);border-color:var(--gray-200);">All Projects</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2025 Jack Bull</p>
+      <nav aria-label="Footer navigation">
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#work">Work</a>
+        <a href="../index.html#skills">Skills</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>
