@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Case study: A deep neural network predicting cEDH match outcomes from deck choice and turn order, achieving 40% accuracy — twice the baseline." />
-  <title>cEDH Matchup Prediction Model — Jack Bull</title>
+  <meta name="description" content="Case study: A deep neural network predicting cEDH match outcomes from deck choice and turn order, achieving 40% accuracy - twice the baseline." />
+  <title>cEDH Matchup Prediction Model - Jack Bull</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
@@ -15,7 +15,7 @@
     /* Nav links point back to main page */
     .nav-logo { color: var(--accent); }
 
-    /* Case study hero — compact dark band */
+    /* Case study hero - compact dark band */
     .cs-hero {
       background: var(--navy);
       padding-block: clamp(96px, 14vw, 140px) clamp(56px, 8vw, 88px);
@@ -391,7 +391,7 @@
 
         <div class="section-label">ML Research</div>
         <h1 class="cs-title">Modeling Expected Win Probability in Competitive Magic: The Gathering</h1>
-        <p class="cs-subtitle">A deep neural network predicting cEDH match outcomes from deck choice and turn order — trained on five months of tournament data.</p>
+        <p class="cs-subtitle">A deep neural network predicting cEDH match outcomes from deck choice and turn order - trained on five months of tournament data.</p>
 
         <div class="cs-stats" role="list" aria-label="Project key figures">
           <div class="cs-stat" role="listitem">
@@ -437,15 +437,15 @@
           <h2 class="section-heading reveal">Why cEDH resists traditional statistical analysis</h2>
 
           <div class="cs-prose reveal">
-            <p>Competitive Commander (cEDH) is a four-player format of Magic: The Gathering with a fundamentally different statistical profile to every other format the game has produced. In one-on-one Magic, outcomes are zero-sum and attribution is simple: one player wins, one loses. In cEDH, four players compete simultaneously, and the cause of any given outcome is deeply entangled across opponents.</p>
+            <p>Competitive Commander (cEDH) is a four-player format of Magic: The Gathering with a fundamentally different statistical profile to every other format the game has produced. In one-on-one Magic, outcomes are zero-sum and attribution is simple: one player wins, which causes the other to lose. In cEDH, with four players in each game, it can be much harder to understand the specific cause for the outcome of a game.</p>
 
-            <p>This creates several compounding problems for analysis. Matchup data becomes confounded — when Deck A loses, was it because of Deck B, C, or D? Players rely heavily on anecdote as a result. The singleton deck-building requirement (each of the 100 cards must be unique) makes individual games less consistent, requiring a larger sample size to draw statistically significant conclusions. And because the metagame evolves quickly, older data often becomes irrelevant before a sufficient sample accumulates.</p>
+            <p>This creates several compounding problems for analysis. First, matchup data becomes confounded: when Deck A loses, was it because of Deck B, C, or D? Players rely heavily on anecdotes as a result. The singleton deck-building requirement (each of the 100 cards in your deck must be unique) makes individual games less consistent, requiring a larger sample size to draw statistically significant conclusions. And finally, because the metagame evolves quickly, older data can quickly become irrelevant, making it difficult to build reliable datasets.</p>
 
-            <p>Turn order adds another layer of complexity. Players who act earlier in a round have a structurally higher win rate — not because of skill, but because of the inherent advantage of acting before opponents.</p>
+            <p>Turn order adds another layer of complexity. Players who act earlier in a round have a structurally higher win rate - not because of skill, but because of the inherent advantage in getting to act before your opponents.</p>
           </div>
 
           <div class="callout reveal" role="note">
-            <p>Seat 1 (first in turn order) wins approximately 28–30% of cEDH games — nearly double the 20% that perfect equality across four players would predict.</p>
+            <p>Seat 1 (first in turn order) wins approximately 32.7% of tournamentcEDH games - nearly double Seat 4's 16.8%. (https://www.playnicemtg.com/meta)</p>
           </div>
 
           <!-- Seat win-rate visual -->
@@ -481,7 +481,7 @@
           </div>
 
           <div class="cs-prose reveal">
-            <p style="margin-top:24px;">This research proposes a machine learning solution: rather than trying to enumerate every possible interaction, train a deep neural network to find patterns across a large body of real tournament data — patterns that are too subtle or multi-dimensional for traditional statistical methods to surface.</p>
+            <p style="margin-top:24px;">This research proposes a machine learning solution: instead of trying to track every possible interaction, why not train a deep neural network to find patterns across a large body of real tournament data - patterns which might be too subtle or multi-dimensional for traditional statistical methods to detect.</p>
           </div>
         </div>
       </div>
@@ -502,7 +502,7 @@
             <div class="model-card">
               <div class="model-card-label">Feature 1</div>
               <h4>Commander Choice</h4>
-              <p>The archetype identifier for each player's deck, treated as equivalent to Commander identity. Because cEDH decks use 100 unique cards, two decks sharing the same Commander play near-identically — card variation between them is treated as noise.</p>
+              <p>The archetype identifier for each player's deck, treated as equivalent to Commander identity. Decks with the same Commander tend to play very similarly, even when specific card choices may vary between players.</p>
             </div>
             <div class="model-card">
               <div class="model-card-label">Feature 2</div>
@@ -522,7 +522,7 @@
           </div>
 
           <div class="cs-prose reveal">
-            <p>Data collection and cleaning is handled in <code>TopdeckAPICall.py</code> and <code>DataPreprocessing511.py</code>. The preprocessing step assigns each unique Commander a numeric label ID — the format used by the embedding layers during training.</p>
+            <p>Data collection and cleaning is handled in <code>TopdeckAPICall.py</code> and <code>DataPreprocessing511.py</code>. The preprocessing step assigns each unique Commander a numeric label ID - the format used by the embedding layers during training.</p>
           </div>
 
           <ul class="cs-tags reveal" role="list" aria-label="Technologies used">
@@ -544,7 +544,7 @@
           <h2 class="section-heading reveal">Two models, two problems</h2>
 
           <div class="cs-prose reveal">
-            <p>A critical early design decision was to separate win prediction from draw prediction. Draws are not a strategic goal of any deck — they are a byproduct of specific in-game events. The factors that cause draws differ meaningfully from the factors that determine which player wins. Collapsing them into a single five-class model obscured both signals.</p>
+            <p>One critical early design decision was to separate win prediction from draw prediction. Since draws are not a strategic goal of any deck, and are instead are a byproduct of specific in-game events, the factors that cause draws differ meaningfully from the factors that determine which player wins. Collapsing them into a single five-class model obscured both signals.</p>
             <p>The solution: two separate deep neural networks, each specialized to one task.</p>
           </div>
 
@@ -565,20 +565,20 @@
           <h3 class="reveal" style="font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:16px;">How commanders become vectors</h3>
 
           <div class="cs-prose reveal">
-            <p>Commander names are high-cardinality categorical variables — there are hundreds of distinct commanders in the cEDH metagame. One-hot encoding at this scale would produce an extremely sparse, uninformative feature space. Instead, both models use <strong>embedding layers</strong> to represent each Commander as a learned dense numeric vector.</p>
-            <p>During training, the embedding layer builds a vector for each Commander that encodes its latent characteristics — its aggression level, its reliance on specific game plans, its historical relationships with other decks. Two Commanders that tend to produce similar outcomes in similar pods will end up with similar embeddings. This allows the model to generalize across Commanders it has seen less frequently by reasoning about their similarity to more well-represented ones.</p>
-            <p>These embedded Commander representations are then processed through <strong>multi-head self-attention</strong>. Borrowed from Transformer architectures, self-attention lets the model interpret each player's Commander in the context of the other three at the table — not in isolation. A Commander that is very powerful in a vacuum may be weakened by a specific opponent, and self-attention provides the mechanism for the model to learn that dependency.</p>
+            <p>Commander names are high-cardinality categorical variables - there are hundreds of distinct commanders in the cEDH metagame. One-hot encoding at this scale would produce an extremely sparse, uninformative feature space. Instead, both models use <strong>embedding layers</strong> to represent each Commander as a learned dense numeric vector.</p>
+            <p>During training, the embedding layer builds a vector for each Commander that encodes its latent characteristics - its aggression level, its reliance on specific game plans, its historical relationships with other decks. Two Commanders that tend to produce similar outcomes in similar pods will end up with similar embeddings. This allows the model to generalize across Commanders it has seen less frequently by reasoning about their similarity to more well-represented ones.</p>
+            <p>These embedded Commander representations are then processed through <strong>multi-head self-attention</strong>. Borrowed from Transformer architectures, self-attention lets the model interpret each player's Commander in the context of the other three at the table. A Commander that is very powerful in a vacuum may perform poorly when playing against a specific opponent, and self-attention provides the mechanism for the model to learn that dependency.</p>
           </div>
 
           <div class="callout reveal" role="note">
-            <p>Embedding layers allow the model to learn "what kind of deck is this?" from data — capturing synergy and counter-synergy relationships that would be impossible to hand-engineer across hundreds of Commanders.</p>
+            <p>Embedding layers allow the model to learn "what kind of deck is this?" from data, capturing synergy and counter-synergy relationships that would be impossible to hand-engineer across hundreds of Commanders.</p>
           </div>
 
           <div class="section-label reveal" style="margin-top:40px;">Training</div>
           <h3 class="reveal" style="font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:16px;">Handling class imbalance</h3>
 
           <div class="cs-prose reveal">
-            <p>cEDH outcomes are not uniformly distributed. Seat 1 wins far more often than Seat 4, and draws are relatively rare. Without intervention, a naive model could achieve reasonable accuracy by simply predicting Seat 1 every time — which is not useful.</p>
+            <p>cEDH outcomes are not uniformly distributed; Seat 1 wins far more often than Seat 4. Without intervention, a naive model could achieve reasonable accuracy by simply predicting Seat 1 every time, which would not be useful.</p>
             <p>To counteract this, <strong>inverse frequency class weighting</strong> was applied during training. Each class's loss contribution is scaled in proportion to how underrepresented that class is in the dataset. The model is penalized more severely for misclassifying rare outcomes, forcing it to learn their patterns rather than ignore them.</p>
             <p>Additional training decisions: the <strong>ADAM optimizer</strong> with <strong>ReduceLROnPlateau</strong> to dynamically adjust the learning rate as training converges; <strong>early stopping</strong> to halt training when validation loss stops improving, preventing overfitting; and an 80/20 train/test split with batch size 16.</p>
           </div>
@@ -601,42 +601,49 @@
       <div class="container">
         <div class="cs-body">
           <div class="section-label reveal">Results</div>
-          <h2 class="section-heading reveal">40.2% accuracy — twice the random baseline</h2>
+          <h2 class="section-heading reveal">40.2% accuracy - twice the random baseline</h2>
 
           <div class="cs-prose reveal">
-            <p>On the held-out test set, the combined model achieved <strong>40.2% overall accuracy</strong>. With five possible outcomes and a random baseline of 20%, this represents a 2× improvement — a meaningful result for a domain with the level of inherent noise and complexity present in cEDH.</p>
+            <p>On the held-out test set, the combined model achieved <strong>40.2% overall accuracy</strong>. With five possible outcomes and a random baseline of 20%, this represents a 2× improvement - a meaningful result for a domain with the level of inherent noise and complexity present in cEDH.</p>
             <p>Precision, recall, and F1 scores were broadly balanced across classes, indicating the model was not simply overfitting to common outcomes. However, performance was markedly uneven by seat position.</p>
           </div>
 
           <figure class="cs-figure reveal" aria-label="Classification report figure">
             <div class="cs-figure-placeholder">
-              <p style="margin:0;color:var(--gray-400);">📊 Classification report screenshot — add image here</p>
+              <img src="../511 Images/511ClassReport.png" alt="Classification report showing 40.2% overall accuracy with per-class precision, recall, and F1 scores" style="max-width:100%;border-radius:6px;" />
             </div>
             <figcaption>Figure 1. Classification report for the best-performing model. Overall accuracy: 40.2%.</figcaption>
           </figure>
 
           <div class="section-label reveal" style="margin-top:40px;">Per-class breakdown</div>
-          <h3 class="reveal" style="font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:16px;">Where the model succeeds — and where it struggles</h3>
+          <h3 class="reveal" style="font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:16px;">Where the model succeeds - and where it struggles</h3>
 
           <div class="cs-prose reveal">
-            <p><strong>Seat 1</strong> is the model's strongest class: precision 0.498, recall 0.546, F1 0.521. The model reliably identifies configurations where the first-seat player is highly likely to win — a combination of strong Commander choice, favorable opponents, and the inherent turn-order advantage.</p>
-            <p><strong>Seats 2 and 3</strong> perform less impressively but remain clearly above chance — the leading diagonal in the confusion matrix is visible, indicating the model is detecting real patterns for these positions.</p>
-            <p><strong>Seat 4</strong> is an outlier in the worst possible direction. Its precision, recall, and F1 are all near chance level, and the confusion matrix shows predictions spread almost uniformly across all classes. One interpretation: out-of-game metrics (Commander choice, table composition) simply do not predict Seat 4 victories — players who win from last position may be doing so almost entirely through in-game actions, without any structural advantage to anchor a prediction to.</p>
-            <p><strong>Draws</strong> are underpredicted by design. Early testing showed that false positive draw predictions were more damaging to overall accuracy than missed draws, so the threshold was tuned toward false negatives. The model's draw precision remains reasonable — it correctly identifies high-confidence draw scenarios — but recall is low.</p>
+            <p><strong>Seat 1</strong> is the model's strongest class: precision 0.498, recall 0.546, F1 0.521. The model reliably identifies configurations where the first-seat player is highly likely to win - a combination of strong Commander choice, favorable opponents, and the inherent turn-order advantage.</p>
+            <p><strong>Seats 2 and 3</strong> perform less impressively but remain clearly above chance - the leading diagonal in the confusion matrix is visible, indicating the model is detecting real patterns for these positions.</p>
+            <p><strong>Seat 4</strong> is an outlier in the worst possible direction. Its precision, recall, and F1 are all near chance level, and the confusion matrix shows predictions spread almost uniformly across all classes. One interpretation: out-of-game metrics (Commander choice, table composition) simply do not predict Seat 4 victories - players who win from last position may be doing so almost entirely through in-game actions, without any structural advantage to anchor a prediction to.</p>
+            <p><strong>Draws</strong> are underpredicted by design. Early testing showed that false positive draw predictions were more damaging to overall accuracy than missed draws, so the threshold was tuned toward false negatives. The model's draw precision remains reasonable - it correctly identifies high-confidence draw scenarios - but recall is low.</p>
           </div>
 
           <figure class="cs-figure reveal" aria-label="Confusion matrix figure">
             <div class="cs-figure-placeholder">
-              <p style="margin:0;color:var(--gray-400);">📊 Confusion matrix screenshot — add image here</p>
+              <img src="../511 Images/511ConfusionMatrix.png" alt="Confusion matrix showing strong diagonal for Seats 1-3 and near-uniform distribution for Seat 4" style="max-width:100%;border-radius:6px;" />
             </div>
             <figcaption>Figure 2. Confusion matrix for the best-performing model. High diagonal values indicate correct predictions; Seat 4 (Class 3) shows near-uniform distribution across all classes.</figcaption>
           </figure>
 
-          <figure class="cs-figure reveal" aria-label="Learning curves figure">
+          <figure class="cs-figure reveal" aria-label="Learning curves for seat model">
             <div class="cs-figure-placeholder">
-              <p style="margin:0;color:var(--gray-400);">📉 Learning curves screenshot — add image here</p>
+              <img src="../511 Images/511SeatLearnCurve.png" alt="Seat model learning curves showing stable convergence with training and validation loss decreasing together" style="max-width:100%;border-radius:6px;" />
             </div>
-            <figcaption>Figure 3. Training vs. validation loss curves for both models. The seat model converges stably; the draw model shows earlier signs of overfitting, mitigated by a reduced early stopping patience.</figcaption>
+            <figcaption>Figure 3. Learning curves for the seat model. Training and validation loss decrease steadily; early stopping prevents overfitting.</figcaption>
+          </figure>
+
+          <figure class="cs-figure reveal" aria-label="Learning curves for draw model">
+            <div class="cs-figure-placeholder">
+              <img src="../511 Images/511DrawLearnCurve.png" alt="Draw model learning curves showing validation loss spike at epoch 5 triggering early stopping" style="max-width:100%;border-radius:6px;" />
+            </div>
+            <figcaption>Figure 4. Learning curves for the draw model. Validation loss spikes at epoch 5, triggering early stopping before significant overfitting occurs.</figcaption>
           </figure>
         </div>
       </div>
@@ -650,7 +657,7 @@
           <h2 class="section-heading reveal">Benchmarked against human experts</h2>
 
           <div class="cs-prose reveal">
-            <p>To evaluate the model outside its training distribution, a single round of 15 tournament games — sourced from a competition not included in training or testing — was gathered and passed to the best-performing model. The same match data was independently evaluated by three cEDH experts, each asked to predict the most likely winner of each match.</p>
+            <p>To evaluate the model outside its training distribution, a single round of 15 tournament games - sourced from a competition not included in training or testing - was gathered and passed to the best-performing model. The same match data was independently evaluated by three cEDH experts, each asked to predict the most likely winner of each match.</p>
           </div>
 
           <div class="compare-strip reveal" role="list" aria-label="Accuracy comparison">
@@ -673,13 +680,13 @@
           </div>
 
           <div class="cs-prose reveal">
-            <p>At 26.6%, the model's real-world performance fell below its trained accuracy of 40.2% — though it marginally exceeded the 24.4% average across the three experts. The subset of matches appears to contain results that run against the usual patterns in cEDH data, which disadvantaged both the model and the human experts equally.</p>
-            <p>More revealing than the raw accuracy is the model-expert agreement: the model and the best-performing expert made the same prediction in 6 of 15 cases. This suggests both the model and the expert were identifying the same structural signals (Commander strength, matchup history, seat position) and weighting them similarly — even when those signals led them away from the actual result.</p>
+            <p>At 26.6%, the model's real-world performance fell below its trained accuracy of 40.2% - though it marginally exceeded the 24.4% average across the three experts. The subset of matches appears to contain results that run against the usual patterns in cEDH data, which disadvantaged both the model and the human experts equally.</p>
+            <p>More revealing than the raw accuracy is the model-expert agreement: the model and the best-performing expert made the same prediction in 6 of 15 cases. This suggests both the model and the expert were identifying the same structural signals (Commander strength, matchup history, seat position) and weighting them similarly - even when those signals led them away from the actual result.</p>
             <p>Draws were uniformly missed in real-world testing, reinforcing the conclusion that draws are primarily determined by in-game dynamics that the available features cannot capture.</p>
           </div>
 
           <div class="callout reveal" role="note">
-            <p>The model performs on par with expert human analysts — a meaningful outcome given that both are operating on the same limited pre-match information.</p>
+            <p>The model performs on par with expert human analysts - a meaningful outcome given that both are operating on the same limited pre-match information.</p>
           </div>
         </div>
       </div>
@@ -697,9 +704,9 @@
           </div>
 
           <ul class="cs-list reveal" aria-label="Key findings">
-            <li>Turn order advantage is real but not absolute. The model generally supports the conventional belief that Seat 1 is strongest — but also identifies specific Commander and table compositions where Seats 2 or 3 are more advantageous, suggesting deck choice mediates the turn-order effect.</li>
-            <li>Seat 4 is a structural disadvantage, not merely a statistical one. The model's near-total inability to predict Seat 4 wins from pre-match features implies that those wins are driven almost entirely by in-game events — deck choice and table composition provide essentially no predictive power for this position.</li>
-            <li>Draws cannot be predicted from pre-match data alone. Future work would need game-length data (total turns, time elapsed) — metrics current tournament software does not yet record.</li>
+            <li>Turn order advantage is real but not absolute. The model generally supports the conventional belief that Seat 1 is strongest - but also identifies specific Commander and table compositions where Seats 2 or 3 are more advantageous, suggesting deck choice mediates the turn-order effect.</li>
+            <li>Seat 4 is a structural disadvantage, not merely a statistical one. The model's near-total inability to predict Seat 4 wins from pre-match features implies that those wins are driven almost entirely by in-game events - deck choice and table composition provide essentially no predictive power for this position.</li>
+            <li>Draws cannot be predicted from pre-match data alone. Future work would need game-length data (total turns, time elapsed) - metrics current tournament software does not yet record.</li>
             <li>The model agrees with human expert intuition, validating that embedding layers and attention are capturing the same qualitative signals that experienced players use, and doing so quantitatively.</li>
           </ul>
 
@@ -710,7 +717,7 @@
             <li><strong>Larger dataset.</strong> Five months of data is a constrained sample for the dimensionality of this problem. Extending to a multi-year dataset would allow the model to learn patterns across evolving metagames and improve generalization.</li>
             <li><strong>In-game features.</strong> Turn count, game duration, and opening hand size could dramatically improve draw prediction and give the model signal that is currently invisible to it.</li>
             <li><strong>Player Elo integration.</strong> TopDeck now records Elo ratings, but the threshold for qualification (10 recorded games at 32+ player events) excludes too many players for the current dataset size. As the dataset grows, player skill becomes a tractable feature.</li>
-            <li><strong>Explainability layer.</strong> Applying SHAP or LIME to the model's predictions would let players interrogate which Commanders or matchup combinations are driving a given prediction — a direct tool for metagame preparation.</li>
+            <li><strong>Explainability layer.</strong> Applying SHAP or LIME to the model's predictions would let players interrogate which Commanders or matchup combinations are driving a given prediction - a direct tool for metagame preparation.</li>
             <li><strong>API fix and live predictor.</strong> TopDeck's API recently stopped returning Commander names in results. Once that is resolved, the pipeline can be restored and the predictor can be deployed as an interactive tool for players.</li>
           </ul>
         </div>
