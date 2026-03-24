@@ -386,9 +386,9 @@
           <h2 class="section-heading reveal">Can explanations change how users trust an algorithm?</h2>
 
           <div class="cs-prose reveal">
-            <p>Recommendation algorithms are ubiquitous: they surface films to watch, products to buy, and music to listen to. Yet users routinely override or ignore these recommendations, often citing a lack of understanding of why a suggestion was made. Explainable AI (XAI) promises to address this by providing rationales alongside predictions - but do those rationales actually change user behaviour and perception?</p>
+            <p>Recommendation systems are in everything these days: they help us find films to watch, products to buy, and music to listen to. It’s important, then, for users to have complete confidence in the recommendations that are made for them. Without trust, recommendation systems will fail at their primary goal of helping connect users to new items they will enjoy. Unfortunately, as systems have become more and more complex, it has also become more and more difficult to connect users with the exact reasoning behind why a decision was made. Explainable AI (XAI) is a field that promises to address this by providing clear rationales about why a system made the recommendations it did; but do those explanations actually change user behaviour and perception?</p>
 
-            <p>The literature reveals a gap. While a large body of work demonstrates that explanations can improve comprehension, the relationship between explanation style and the specific dimensions of trust, perceived quality, and perceived helpfulness remains contested. Most prior studies treat trust as a single monolithic construct and test only one or two explanation types in isolation. This research addresses both shortcomings within a single controlled study.</p>
+            <p>The literature reveals a gap. While a large body of work demonstrates that explanations can improve comprehension, the nature of the relationships between explanation style and perception measurements - specifically trust, perceived quality, and perceived helpfulness - remains contested. Most prior studies treat trust as a single construct and test only one or two explanation types in isolation. This research addresses both shortcomings within a single controlled study.</p>
 
             <p>The central question: do different XAI explanation methods - SHAP feature-importance values, LIME local surrogates, a large language model narrative, an internal numeric score, or no explanation at all - lead to meaningfully different ratings of recommendation helpfulness, quality, and trustworthiness?</p>
           </div>
@@ -408,7 +408,7 @@
           <h2 class="section-heading reveal">Building the recommendation engine</h2>
 
           <div class="cs-prose reveal">
-            <p>The recommender system was trained on the MovieLens-100K dataset, a widely-used benchmark comprising 100,000 ratings from 943 users across 1,682 films. The dataset includes demographic metadata (age, gender, occupation) and film genre tags, which were combined with collaborative-filtering features to form the training feature set.</p>
+            <p>The recommender system was trained on the MovieLens-100K dataset, a widely-used benchmark comprising 100,000 ratings from 943 users across 1,682 films. The dataset’s film rating and film genre tags were combined with collaborative-filtering features to form the training feature set.</p>
 
             <p>An XGBoost gradient-boosted tree model was selected as the recommender, specifically using the XGBRanker variant with a pairwise ranking objective. Pairwise ranking optimises the relative ordering of items for a given user rather than predicting an absolute rating, making it better suited to the retrieval task of surfacing a ranked list of suggestions. Hyperparameters were tuned via grid search with cross-validation.</p>
 
@@ -509,7 +509,7 @@
           <h2 class="section-heading reveal">What the data showed</h2>
 
           <div class="cs-prose reveal">
-            <p>The primary Friedman test across explanation conditions revealed a statistically significant difference for helpfulness ratings (χ²(4) = 28.5, p &lt; .001). Post-hoc Wilcoxon comparisons identified LLM-generated narratives as the condition rated highest for helpfulness - participants found natural-language explanations meaningfully easier to understand than feature-importance visualisations or numeric scores.</p>
+            <p>The primary Friedman test across explanation conditions revealed a statistically significant difference for helpfulness ratings (χ²(4) = 28.5, p &lt; .001). Post-hoc Wilcoxon comparisons identified LLM-generated narratives as the condition rated highest for helpfulness, indicating that participants found natural-language explanations meaningfully easier to understand than feature-importance visualisations or numeric scores.</p>
           </div>
 
           <div class="finding-strip reveal" aria-label="Key statistical findings">
@@ -532,7 +532,7 @@
           </div>
 
           <div class="cs-prose reveal">
-            <p>Critically, explanation condition had no significant effect on perceived quality (Friedman p = .31) or trust (Friedman p = .22). Users rated the quality and trustworthiness of recommendations at broadly similar levels regardless of whether a SHAP breakdown, LIME surrogate, or LLM narrative accompanied the result. This was an unexpected null finding: the type of explanation did not appear to be a lever for increasing trust in the system.</p>
+            <p>Interestingly, explanation condition had no significant effect on perceived quality (Friedman p = .31) or trust (Friedman p = .22). Users rated the quality and trustworthiness of recommendations at broadly similar levels regardless of whether a SHAP breakdown, LIME surrogate, or LLM narrative accompanied the result. This was an unexpected null finding, which suggested that the type of explanation did not appear to be a lever for increasing trust in the system.</p>
           </div>
 
           <div class="callout reveal" role="note">
@@ -542,9 +542,9 @@
           <h3 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:600;color:var(--navy);margin-bottom:16px;margin-top:12px;" class="reveal">The decoy effect</h3>
 
           <div class="cs-prose reveal">
-            <p>The decoy manipulation produced clear and significant effects. Recommendations identified as decoys received significantly lower perceived quality ratings (Wilcoxon W = 198, p = .005) and lower trust ratings (W = 209, p = .008) compared to standard recommendations. Crucially, no explanation condition was able to reliably counteract this effect - participants down-rated poor recommendations regardless of how they were explained.</p>
+            <p>The decoy manipulation produced clear and significant effects. Recommendations identified as decoys received significantly lower perceived quality ratings (Wilcoxon W = 198, p = .005) and lower trust ratings (W = 209, p = .008) compared to standard recommendations. Crucially, no explanation condition was able to reliably counteract this effect; participants rated decoys poorly regardless of how they were explained.</p>
 
-            <p>Helpfulness ratings did not differ significantly between decoy and non-decoy conditions (W = 242, p = .09), suggesting that users could still find an explanation informative even when they judged the underlying recommendation to be poor. This dissociation between helpfulness and quality/trust represents an important nuance for system designers: a well-crafted explanation can be understood without being believed.</p>
+            <p>Helpfulness ratings did not differ significantly between decoy and non-decoy conditions (W = 242, p = .09), suggesting that users could still find an explanation informative even when they judged the underlying recommendation to be poor. This dissociation between helpfulness and quality/trust highlights an important nuance for system designers: a well-crafted explanation can be understood without being believed.</p>
           </div>
 
           <div class="cs-table-wrap reveal">
@@ -581,7 +581,7 @@
           </div>
 
           <div class="cs-prose reveal">
-            <p>Spearman rank correlations between the model's predicted relevance score and participant ratings were modest but statistically significant: ρ = .369 for perceived quality (p &lt; .001) and ρ = .278 for trust (p = .004). This confirms that the algorithm's internal confidence in a recommendation was the stronger predictor of how users rated it - more so than the explanation style applied. Helpfulness showed a weaker correlation with the predicted score (ρ = .194, p = .028), as expected given that helpfulness is more tightly coupled to explanation design.</p>
+            <p>Spearman rank correlations between the model's predicted relevance score and participant ratings were statistically significant: ρ = .369 for perceived quality (p &lt; .001) and ρ = .278 for trust (p = .004). This confirms that the algorithm's internal confidence in a recommendation was the stronger predictor of how users rated it - more so than the explanation style applied. Helpfulness showed a weaker correlation with the predicted score (ρ = .194, p = .028), as expected given that helpfulness is more tightly linked to the explanation design itself.</p>
           </div>
         </div>
       </div>
@@ -595,27 +595,27 @@
           <h2 class="section-heading reveal">What this means for XAI system design</h2>
 
           <div class="cs-prose reveal">
-            <p>The findings carry a cautionary message for practitioners and researchers who view XAI primarily as a trust-building tool. Across five explanation conditions - ranging from raw numeric scores to sophisticated LLM narratives - explanation style did not significantly move the needle on perceived quality or trust. What determined trust was the quality of the underlying recommendation itself.</p>
+            <p>The findings are extremely interesting for anyone who views XAI primarily as a trust-building tool. Across five explanation conditions, ranging from raw numeric scores to sophisticated LLM narratives, explanation style did not significantly move the needle on perceived quality or trust. The primary factor that determined trust was the quality of the underlying recommendation itself.</p>
 
-            <p>This does not render explainability redundant. LLM-generated explanations improved perceived helpfulness substantially, and the Spearman correlations confirm that the model's confidence was meaningfully related to user perception. But it does suggest that deploying an interpretable explanation layer around a poor recommender will not manufacture trust that the algorithm has not earned. Investment in recommendation quality should precede investment in explanation sophistication.</p>
+            <p>This doesn't necessarily render explainability redundant, though. LLM-generated explanations in particular improved perceived helpfulness substantially, and the Spearman correlations confirm that the model's confidence was meaningfully related to user perception. But it does suggest that deploying an interpretable explanation layer around a poor recommender will not manufacture trust that the algorithm has not earned. Investment in recommendation quality is more important than investment in explanation quality.</p>
           </div>
 
           <div class="callout reveal" role="note">
-            <p>Explanations help users understand recommendations - they do not rescue poor ones. System designers should prioritise recommendation accuracy; only then does the choice of explanation method become a meaningful differentiator.</p>
+            <p>Explanations can help users understand recommendations, but they can't rescue poor ones. System designers should prioritise recommendation accuracy; only then does the choice of explanation method become a meaningful differentiator.</p>
           </div>
 
           <div class="cs-prose reveal">
-            <p>The LLM condition's superior helpfulness ratings also have practical implications. Natural-language explanations are more accessible than statistical visualisations to users without a data-science background, and can contextualise a recommendation in terms of the user's own history and preferences. As LLM APIs become cheaper and more reliable, embedding a lightweight generative explanation layer is an increasingly viable option for consumer-facing systems - though the results here underscore that this benefit is limited to comprehension, not trust.</p>
+            <p>The LLM condition's superior helpfulness ratings also have practical implications. Natural-language explanations are more accessible than statistical visualisations to users without a data-science background, and they can contextualise a recommendation in terms of the user's own history and preferences. As LLM APIs become cheaper and more reliable, embedding a lightweight generative explanation layer is an increasingly viable option for consumer-facing systems , despite results here underscore that this benefit is limited to comprehension, not trust.</p>
           </div>
 
           <h3 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:600;color:var(--navy);margin-bottom:16px;margin-top:12px;" class="reveal">Limitations and future directions</h3>
 
           <ul class="cs-list reveal" aria-label="Study limitations">
-            <li>The sample of 25 participants, while appropriate for a within-subjects design, limits generalisation. A larger and more demographically varied sample would strengthen confidence in the null findings for quality and trust.</li>
-            <li>The MovieLens-100K dataset is over two decades old and reflects a different media consumption landscape. Replication with a contemporary streaming dataset and updated demographic features would be valuable.</li>
-            <li>Participants rated recommendations in a controlled session context. Real-world trust builds (and erodes) over many interactions; a longitudinal study would better capture how explanation exposure affects trust trajectories.</li>
+            <li>The sample of 25 participants, while appropriate for a within-subjects design, limits generalisation. A larger and more demographically varied sample could strengthen confidence in the null findings for quality and trust.</li>
+            <li>The MovieLens-100K dataset is a limited dataset with only 1,000 users and 1,700 movies. A larger dataset could improve the quality of the recommendation system itself, leading to more accurate test results.</li>
+            <li>Participants rated recommendations in a controlled session context. Real-world trust builds and erodes over many interactions; a longitudinal study could better capture how explanation exposure affects trust trajectories.</li>
             <li>The LLM explanation condition used a single prompt design. Varying the narrative style, verbosity, or framing could reveal which aspects of natural-language explanations drive the helpfulness advantage.</li>
-            <li>All three outcome measures (helpfulness, quality, trust) were captured via single-item Likert scales. Multi-item validated scales would improve measurement reliability and allow sub-construct analysis.</li>
+            <li>All three outcome measures (helpfulness, quality, trust) were captured via single-item Likert scales. Multi-item validated scales could improve measurement reliability and allow sub-construct analysis.</li>
           </ul>
         </div>
       </div>
