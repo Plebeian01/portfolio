@@ -84,21 +84,58 @@
     });
   }
 
-  /* ── Contact form: placeholder intercept ─────────────── */
+  /* ── Contact form: Web3Forms submission ──────────────── */
   const form = document.querySelector('.contact-form');
 
   if (form) {
-    form.addEventListener('submit', function (e) {
+    const btn    = form.querySelector('.form-submit');
+    const status = form.querySelector('.form-status');
+
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      const btn = form.querySelector('.form-submit');
-      const original = btn.textContent;
-      btn.textContent = 'Noted! Email jrbull301@gmail.com directly.';
+
+      // Basic client-side validation
+      const name    = form.name.value.trim();
+      const email   = form.email.value.trim();
+      const message = form.message.value.trim();
+
+      if (!name || !email || !message) {
+        status.textContent = 'Please fill in all fields.';
+        status.style.color = 'var(--error, #c0392b)';
+        return;
+      }
+
+      btn.textContent = 'Sending…';
       btn.disabled = true;
-      setTimeout(function () {
-        btn.textContent = original;
+      status.textContent = '';
+
+      try {
+        const res  = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: form.access_key.value,
+            subject:    form.subject.value,
+            botcheck:   form.botcheck.checked,
+            name, email, message
+          })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          status.textContent = 'Message sent — I\'ll be in touch soon.';
+          status.style.color = 'var(--accent-text, #2a7a5a)';
+          form.reset();
+        } else {
+          throw new Error(data.message || 'Submission failed');
+        }
+      } catch (err) {
+        status.textContent = 'Something went wrong. Please email jrbull301@gmail.com directly.';
+        status.style.color = 'var(--error, #c0392b)';
+      } finally {
+        btn.textContent = 'Send Message';
         btn.disabled = false;
-        form.reset();
-      }, 4000);
+      }
     });
   }
 

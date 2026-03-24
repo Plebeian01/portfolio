@@ -695,15 +695,9 @@ ul { list-style: none; }
 
 .form-submit { align-self: flex-start; }
 
-.form-note {
-  font-size: .8rem;
-  color: var(--text-muted);
-}
-
-.form-note a {
-  color: var(--accent-text);
-  text-decoration: underline;
-  text-underline-offset: 2px;
+.form-status {
+  font-size: .875rem;
+  min-height: 1.25rem;
 }
 
 /* ─── Footer ─────────────────────────────────────────────── */

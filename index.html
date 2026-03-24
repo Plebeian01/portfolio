@@ -281,22 +281,25 @@
           </div>
 
           <form class="contact-form reveal" aria-label="Contact form" novalidate>
+            <input type="hidden" name="access_key" value="2f26be0c-e0f4-454e-b2fc-714c2636d7b5" />
+            <input type="hidden" name="subject" value="Portfolio contact from jackbull.dev" />
+            <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" />
             <div class="form-row">
               <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" id="name" name="name" placeholder="Your name" autocomplete="name" />
+                <input type="text" id="name" name="name" placeholder="Your name" autocomplete="name" required />
               </div>
               <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" />
+                <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" required />
               </div>
             </div>
             <div class="form-group">
               <label for="message">Message</label>
-              <textarea id="message" name="message" rows="5" placeholder="Tell me about your project or just say hello…"></textarea>
+              <textarea id="message" name="message" rows="5" placeholder="Tell me about your project or just say hello…" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary form-submit">Send Message</button>
-            <p class="form-note">This form is currently a placeholder - for now, email directly at <a href="mailto:jrbull301@gmail.com">jrbull301@gmail.com</a>.</p>
+            <p class="form-status" role="status" aria-live="polite"></p>
           </form>
         </div>
       </div>
