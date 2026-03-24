@@ -445,7 +445,7 @@
           </div>
 
           <div class="callout reveal" role="note">
-            <p>Seat 1 (first in turn order) wins approximately 32.7% of tournamentcEDH games - nearly double Seat 4's 16.8%. (https://www.playnicemtg.com/meta)</p>
+            <p>Seat 1 (first in turn order) wins approximately 32.7% of tournament cEDH games - nearly double Seat 4's 16.8%. (https://www.playnicemtg.com/meta)</p>
           </div>
 
           <!-- Seat win-rate visual -->
@@ -544,7 +544,7 @@
           <h2 class="section-heading reveal">Two models, two problems</h2>
 
           <div class="cs-prose reveal">
-            <p>One critical early design decision was to separate win prediction from draw prediction. Since draws are not a strategic goal of any deck, and are instead are a byproduct of specific in-game events, the factors that cause draws differ meaningfully from the factors that determine which player wins. Collapsing them into a single five-class model obscured both signals.</p>
+            <p>Early on, it became clear that it would be necessary to separate win prediction from draw prediction. Since draws are not a strategic goal of any deck, and are instead are a byproduct of specific in-game events, the factors that cause draws differ meaningfully from the factors that determine which player wins. Collapsing them into a single five-class model obscured both signals, making a mess of the data.</p>
             <p>The solution: two separate deep neural networks, each specialized to one task.</p>
           </div>
 
@@ -605,7 +605,7 @@
 
           <div class="cs-prose reveal">
             <p>On the held-out test set, the combined model achieved <strong>40.2% overall accuracy</strong>. With five possible outcomes and a random baseline of 20%, this represents a 2× improvement - a meaningful result for a domain with the level of inherent noise and complexity present in cEDH.</p>
-            <p>Precision, recall, and F1 scores were broadly balanced across classes, indicating the model was not simply overfitting to common outcomes. However, performance was markedly uneven by seat position.</p>
+            <p>Precision, recall, and F1 scores were broadly balanced across classes, indicating the model was not simply overfitting to common outcomes. However, performance was markedly uneven when comparing each seat position.</p>
           </div>
 
           <figure class="cs-figure reveal" aria-label="Classification report figure">
@@ -619,10 +619,10 @@
           <h3 class="reveal" style="font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:16px;">Where the model succeeds - and where it struggles</h3>
 
           <div class="cs-prose reveal">
-            <p><strong>Seat 1</strong> is the model's strongest class: precision 0.498, recall 0.546, F1 0.521. The model reliably identifies configurations where the first-seat player is highly likely to win - a combination of strong Commander choice, favorable opponents, and the inherent turn-order advantage.</p>
-            <p><strong>Seats 2 and 3</strong> perform less impressively but remain clearly above chance - the leading diagonal in the confusion matrix is visible, indicating the model is detecting real patterns for these positions.</p>
-            <p><strong>Seat 4</strong> is an outlier in the worst possible direction. Its precision, recall, and F1 are all near chance level, and the confusion matrix shows predictions spread almost uniformly across all classes. One interpretation: out-of-game metrics (Commander choice, table composition) simply do not predict Seat 4 victories - players who win from last position may be doing so almost entirely through in-game actions, without any structural advantage to anchor a prediction to.</p>
-            <p><strong>Draws</strong> are underpredicted by design. Early testing showed that false positive draw predictions were more damaging to overall accuracy than missed draws, so the threshold was tuned toward false negatives. The model's draw precision remains reasonable - it correctly identifies high-confidence draw scenarios - but recall is low.</p>
+            <p><strong>Seat 1</strong> (case 0)is the model's strongest class: precision 0.498, recall 0.546, F1 0.521. The model reliably identifies configurations where the first-seat player is highly likely to win - a combination of strong Commander choice, favorable opponents, and the inherent turn-order advantage.</p>
+            <p><strong>Seats 2 and 3</strong> (cases 1 and 2) perform less impressively but remain clearly above chance - the leading diagonal in the confusion matrix is visible, indicating the model is detecting real patterns for these positions.</p>
+            <p><strong>Seat 4</strong> (case 3), by contrast, is difficult to predict more than random chance. Its precision, recall, and F1 are all near chance level, and the confusion matrix shows predictions spread almost uniformly across all classes. My proposed explanation for this is that out-of-game metrics (Commander choice, table composition) don't meaningfully predict Seat 4 victories - players who win from last seat do so almost entirely through in-game actions, without any (or in spite of) structural advantages.</p>
+            <p><strong>Draws</strong> (case 4) are underpredicted by design. Early testing showed that false positive draw predictions were more damaging to overall accuracy than missed draws, so the threshold was tuned toward false negatives. The model's draw precision remains reasonable - it correctly identifies high-confidence draw scenarios - but recall is low.</p>
           </div>
 
           <figure class="cs-figure reveal" aria-label="Confusion matrix figure">
