@@ -105,6 +105,12 @@
         return;
       }
 
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        status.textContent = 'Please enter a valid email address.';
+        status.style.color = 'var(--error, #c0392b)';
+        return;
+      }
+
       btn.textContent = 'Sending…';
       btn.disabled = true;
       status.textContent = '';
