@@ -17,30 +17,47 @@
   onScroll(); // run once on load
 
   /* ── Mobile nav toggle ───────────────────────────────── */
-  const navToggle = document.getElementById('nav-toggle');
-  const navLinks  = document.getElementById('nav-links');
+  const navToggle  = document.getElementById('nav-toggle');
+  const navLinks   = document.getElementById('nav-links');
+  const mainContent = document.getElementById('main-content');
+  const siteFooter  = document.querySelector('.site-footer');
+
+  function openNav() {
+    navLinks.classList.add('open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    // Prevent keyboard focus from reaching content behind the drawer
+    if (mainContent) mainContent.inert = true;
+    if (siteFooter)  siteFooter.inert  = true;
+    // Move focus into the nav
+    const firstLink = navLinks.querySelector('a');
+    if (firstLink) firstLink.focus();
+  }
+
+  function closeNav() {
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (mainContent) mainContent.inert = false;
+    if (siteFooter)  siteFooter.inert  = false;
+  }
 
   navToggle.addEventListener('click', function () {
-    const isOpen = navLinks.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', String(isOpen));
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    navLinks.classList.contains('open') ? closeNav() : openNav();
   });
 
   // Close nav when a link is clicked
   navLinks.querySelectorAll('a').forEach(function (link) {
     link.addEventListener('click', function () {
-      navLinks.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      closeNav();
+      navToggle.focus();
     });
   });
 
   // Close nav on Escape key, return focus to toggle
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && navLinks.classList.contains('open')) {
-      navLinks.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      closeNav();
       navToggle.focus();
     }
   });
@@ -52,9 +69,7 @@
       !navLinks.contains(e.target) &&
       !navToggle.contains(e.target)
     ) {
-      navLinks.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      closeNav();
     }
   });
 
@@ -88,32 +103,57 @@
   const form = document.querySelector('.contact-form');
 
   if (form) {
-    const btn    = form.querySelector('.form-submit');
-    const status = form.querySelector('.form-status');
+    const btn       = form.querySelector('.form-submit');
+    const status    = form.querySelector('.form-status');
+    const nameInput = form.querySelector('#name');
+    const emailInput = form.querySelector('#email');
+    const msgInput  = form.querySelector('#message');
+
+    // Clear aria-invalid as the user corrects a field
+    [nameInput, emailInput, msgInput].forEach(function (el) {
+      if (!el) return;
+      el.addEventListener('input', function () {
+        el.removeAttribute('aria-invalid');
+      });
+    });
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      // Basic client-side validation
-      const name    = form.name.value.trim();
-      const email   = form.email.value.trim();
-      const message = form.message.value.trim();
+      const name    = nameInput  ? nameInput.value.trim()  : '';
+      const email   = emailInput ? emailInput.value.trim() : '';
+      const message = msgInput   ? msgInput.value.trim()   : '';
 
-      if (!name || !email || !message) {
-        status.textContent = 'Please fill in all fields.';
-        status.style.color = 'var(--error, #c0392b)';
-        return;
+      // Reset validation state
+      [nameInput, emailInput, msgInput].forEach(function (el) {
+        if (el) el.removeAttribute('aria-invalid');
+      });
+      status.textContent = '';
+
+      // Validate
+      let hasError = false;
+
+      if (!name)    { if (nameInput)  nameInput.setAttribute('aria-invalid', 'true');  hasError = true; }
+      if (!message) { if (msgInput)   msgInput.setAttribute('aria-invalid', 'true');   hasError = true; }
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (emailInput) emailInput.setAttribute('aria-invalid', 'true');
+        hasError = true;
       }
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        status.textContent = 'Please enter a valid email address.';
+      if (hasError) {
+        const emptyFields = !name || !email || !message;
+        status.textContent = emptyFields
+          ? 'Please fill in all fields.'
+          : 'Please enter a valid email address.';
         status.style.color = 'var(--error, #c0392b)';
+        const firstInvalid = form.querySelector('[aria-invalid="true"]');
+        if (firstInvalid) firstInvalid.focus();
         return;
       }
 
       btn.textContent = 'Sending…';
       btn.disabled = true;
-      status.textContent = '';
 
       try {
         const res  = await fetch('https://api.web3forms.com/submit', {
@@ -132,6 +172,9 @@
           status.textContent = 'Message sent — I\'ll be in touch soon.';
           status.style.color = 'var(--accent-text, #2a7a5a)';
           form.reset();
+          [nameInput, emailInput, msgInput].forEach(function (el) {
+            if (el) el.removeAttribute('aria-invalid');
+          });
         } else {
           throw new Error(data.message || 'Submission failed');
         }
@@ -146,7 +189,7 @@
   }
 
   /* ── Active nav link highlighting on scroll ──────────── */
-  const sections = document.querySelectorAll('section[id]');
+  const sections   = document.querySelectorAll('section[id]');
   const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
 
   function updateActiveLink() {

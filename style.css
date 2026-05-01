@@ -180,6 +180,34 @@ ul { list-style: none; }
   background: rgba(255,255,255,.07);
 }
 
+.btn-outline {
+  background: transparent;
+  color: var(--navy);
+  border-color: var(--gray-200);
+}
+
+.btn-outline:hover {
+  border-color: var(--navy);
+  background: rgba(15,28,46,.05);
+  transform: translateY(-1px);
+}
+
+/* ─── Mobile nav backdrop ────────────────────────────────── */
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s cubic-bezier(.4,0,.2,1);
+}
+
+.nav-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* ─── Navigation ─────────────────────────────────────────── */
 .site-header {
   position: fixed;
@@ -235,6 +263,21 @@ ul { list-style: none; }
 .nav-links a[aria-current="page"] { color: var(--white); }
 
 .nav-cta {
+  color: var(--accent) !important;
+  font-weight: 500 !important;
+}
+
+.nav-github {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,.55) !important;
+  transition: color var(--transition) !important;
+}
+.nav-github:hover { color: var(--white) !important; }
+.nav-github-text { display: none; }
+
+.nav-resume {
   color: var(--accent) !important;
   font-weight: 500 !important;
 }
@@ -369,6 +412,18 @@ ul { list-style: none; }
   border: 1px solid rgba(45,212,191,.1);
 }
 
+/* Hero photo */
+.hero-photo {
+  width: clamp(200px, 22vw, 300px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 10%;
+  border: 3px solid rgba(45,212,191,.2);
+  box-shadow: 0 0 0 10px rgba(45,212,191,.05), 0 24px 56px rgba(0,0,0,.4);
+  display: block;
+}
+
 /* Scroll indicator */
 .scroll-indicator {
   position: absolute;
@@ -410,6 +465,18 @@ ul { list-style: none; }
 
 .about-body strong { color: var(--text); font-weight: 600; }
 .about-body em { font-style: italic; color: var(--text); }
+
+.about-resume-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: .875rem;
+  font-weight: 500;
+  color: var(--accent-text);
+  margin-top: 12px;
+  transition: gap var(--transition), opacity var(--transition);
+}
+.about-resume-link:hover { gap: 11px; opacity: .75; }
 
 .about-facts {
   display: flex;
@@ -524,6 +591,37 @@ ul { list-style: none; }
 }
 
 .card-link:hover { gap: 10px; opacity: .8; }
+
+/* Card thumbnail header band */
+.card-thumbnail {
+  height: 150px;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 16px 24px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  flex-shrink: 0;
+}
+
+.card-thumbnail svg { width: 100%; height: 100%; }
+
+/* Coming soon card */
+.project-card--soon {
+  border-style: dashed !important;
+  border-color: var(--gray-200) !important;
+  background: transparent !important;
+}
+.project-card--soon:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: var(--accent) !important;
+  background: var(--accent-dim) !important;
+}
+.project-card--soon .card-title { color: var(--gray-400); }
+.project-card--soon .card-description { color: var(--gray-400); }
+.project-card--soon .card-link { color: var(--text-muted); }
 
 /* ─── Skills ─────────────────────────────────────────────── */
 .skills-grid {
@@ -693,6 +791,12 @@ ul { list-style: none; }
   outline: none; /* custom focus via border + shadow */
 }
 
+.form-group input[aria-invalid="true"],
+.form-group textarea[aria-invalid="true"] {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 3px rgba(192,57,43,.12);
+}
+
 .form-submit { align-self: flex-start; }
 
 .form-status {
@@ -701,6 +805,24 @@ ul { list-style: none; }
 }
 
 /* ─── Footer ─────────────────────────────────────────────── */
+.footer-copy {
+  color: rgba(255,255,255,.4);
+  font-size: .85rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,.4);
+  font-size: .85rem;
+  transition: color var(--transition);
+}
+
+.footer-links a:hover { color: rgba(255,255,255,.8); }
+
 .site-footer {
   background: var(--navy);
   padding-block: 28px;
